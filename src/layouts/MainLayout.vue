@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Insurance
         </q-toolbar-title>
 
-        <div>Quasar</div>
+        <div><q-icon name="settings" style="font-size: 1.4rem;" /></div>
       </q-toolbar>
     </q-header>
 
