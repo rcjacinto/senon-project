@@ -3,7 +3,7 @@
      <div class="row items-start">
        <div class="col-3 q-pa-md">
         <q-card class="my-card">
-          <q-card-section class="bg-primary text-white">
+          <q-card-section class="bg-secondary text-white">
 
             <q-icon name="all_inbox" style="font-size:48px;"/>
             <div class="text-h6">Reports</div>
@@ -14,7 +14,7 @@
 
        <div class="col-3 q-pa-md">
         <q-card class="my-card">
-          <q-card-section class="bg-primary text-white">
+          <q-card-section class="bg-secondary text-white">
             <q-icon name="account_box" style="font-size:48px;"/>
             <div class="text-h6">Accounts </div>
           </q-card-section>
@@ -24,11 +24,10 @@
 
        <div class="col-3 q-pa-md">
         <q-card class="my-card">
-          <q-card-section class="bg-primary text-white">
+          <q-card-section class="bg-secondary text-white">
             <q-icon name="assignment" style="font-size:48px;"/>
-            <div class="text-h6">Our Changing Planet</div>
+            <div class="text-h6">Assignments</div>
           </q-card-section>
-
         </q-card>
        </div>
   </div>
