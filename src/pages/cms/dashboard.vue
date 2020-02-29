@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
      <div class="row items-start">
-       <div class="col-3 q-pa-md">
+       <div class="col q-pa-md">
         <q-card class="my-card">
           <q-card-section class="bg-secondary text-white">
 
@@ -12,7 +12,7 @@
         </q-card>
        </div>
 
-       <div class="col-3 q-pa-md">
+       <div class="col q-pa-md">
         <q-card class="my-card">
           <q-card-section class="bg-secondary text-white">
             <q-icon name="account_box" style="font-size:48px;"/>
@@ -22,7 +22,7 @@
         </q-card>
        </div>
 
-       <div class="col-3 q-pa-md">
+       <div class="col q-pa-md">
         <q-card class="my-card">
           <q-card-section class="bg-secondary text-white">
             <q-icon name="assignment" style="font-size:48px;"/>

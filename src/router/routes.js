@@ -5,7 +5,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/cms/dashboard.vue') },
-      { path: 'assignment', component: () => import('pages/cms/insurance/index.vue') }
+      { path: 'assignment', component: () => import('pages/cms/insurance/index.vue') },
+      { path: 'assignment/create', component: () => import('pages/cms/insurance/new.vue') },
+      { path: 'assignment/modify/:id', component: () => import('pages/cms/insurance/edit.vue') }
+
     ]
   }
 ]

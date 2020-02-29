@@ -15,7 +15,7 @@
           SENON INSURANCE ADJUSTERS & APPRAISERS
         </q-toolbar-title>
 
-        <div><q-icon name="settings" style="font-size: 1.4rem;" /></div>
+        <div><q-icon name="notifications" style="font-size: 1.4rem;" /></div>
       </q-toolbar>
     </q-header>
 

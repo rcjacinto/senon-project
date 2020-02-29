@@ -52,6 +52,10 @@ module.exports = function (ctx) {
         'QBreadcrumbs',
         'QBreadcrumbsEl',
         'QList',
+        'QInput',
+        'QSelect',
+        'QForm',
+        'QDate',
         'QItem',
         'QItemSection',
         'QItemLabel',
@@ -63,7 +67,9 @@ module.exports = function (ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Loading',
+        'Notify']
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
