@@ -6,59 +6,63 @@
         <q-breadcrumbs-el label="Create New Assignment" icon="assignment_turned_in" />
       </q-breadcrumbs>
     </div>
+     <q-form
+      @submit="onSubmit"
+      ref="myForm"
+      >
     <div class="q-pa-md">
       <p class="text-h5">Create Assignment</p>
       <div class="row">
+          <!-- <div class="col q-ma-sm">
+            <q-input label="Reference Number" type="hidden" v-model="form.ref_no" stack-label/>
+          </div> -->
           <div class="col q-ma-sm">
-            <q-input label="Reference Number" v-model="form.ref_no" stack-label/>
+            <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date"/>
+            <q-input label="Type of Policy" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Type of Policy" v-model="form.pol_type" stack-label/>
-          </div>
-          <div class="col q-ma-sm">
-            <q-input label="Policy No." v-model="form.pol_no" stack-label/>
+            <q-input label="Policy No." v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
-          <q-input label="Insured" stack-label v-model="form.name_insured"/>
+          <q-input label="Insured" stack-label v-model="form.name_insured" :rules="[ val => val && val.length > 0 || 'Required']"/>
         </div>
       </div>
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
-          <q-input label="Address" stack-label v-model="form.risk_location"/>
+          <q-input label="Location of Risk" stack-label v-model="form.risk_location" :rules="[ val => val && val.length > 0 || 'Required']"/>
         </div>
       </div>
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Nature of Loss" v-model="form.nature_loss" stack-label/>
+            <q-input label="Nature of Loss" v-model="form.nature_loss" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Date of Loss" v-model="form.date_loss" stack-label type="date"/>
+            <q-input label="Date of Loss" v-model="form.date_loss" stack-label type="date" :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Loss Reserve" v-model="form.loss_reserve" stack-label/>
+            <q-input label="Loss Reserve" v-model="form.loss_reserve" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Adjuster" v-model="form.adjuster" stack-label/>
+            <q-input label="Adjuster" v-model="form.adjuster" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Insurer" v-model="form.insurer" stack-label/>
+            <q-input label="Insurer" v-model="form.insurer" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Third Party" v-model="form.third_party" stack-label/>
+            <q-input label="Third Party" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Broker" v-model="form.broker" stack-label/>
+            <q-input label="Broker" v-model="form.broker" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
@@ -70,25 +74,28 @@
     </div>
     <!-- Breal -->
     <div class="q-pa-md">
-      <q-btn label="Create" icon="done" color="primary" @click="submit()"/>
+      <q-btn label="Create" icon="done" color="primary" type="submit"/>
     </div>
+    </q-form>
   </q-page>
 </template>
 
 <script>
+import { date } from 'quasar'
+
 export default {
   // name: 'PageName',
   data () {
     return {
       form: {
-        date_assigned: null,
+        date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
         ref_no: null,
         pol_type: null,
         pol_no: null,
         name_insured: null,
         risk_location: null,
         nature_loss: null,
-        date_loss: null,
+        date_loss: date.formatDate(new Date(), 'YYYY-MM-DD'),
         loss_reserve: null,
         adjuster: null,
         insurer: null,
@@ -102,7 +109,16 @@ export default {
     }
   },
   methods: {
-    submit () {
+    onSubmit () {
+      this.$refs.myForm.validate().then(success => {
+        if (success) {
+          this.submitValidatedForm()
+        } else {
+
+        }
+      })
+    },
+    submitValidatedForm () {
       this.$q.loading.show()
       this.$axios.post('/api/assignment', this.form).then(res => {
         this.$q.loading.hide()
@@ -114,10 +130,9 @@ export default {
         })
         this.$router.push('/assignment')
       }).catch((err) => {
-        console.log(err)
         this.$q.notify({
           color: 'negative',
-          message: 'Failed to create record',
+          message: err.response.data.message,
           position: 'top-right'
         })
         this.$q.loading.hide()
