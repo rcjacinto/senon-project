@@ -107,6 +107,9 @@ export default {
       }
     }
   },
+  created () {
+    this.getAssignmentInfo()
+  },
   methods: {
     onSubmit () {
       this.$refs.myForm.validate().then(success => {
@@ -115,6 +118,12 @@ export default {
         } else {
 
         }
+      })
+    },
+    getAssignmentInfo () {
+      const assignId = this.$route.params.id
+      this.$axios.get('/api/assignment/' + assignId).then(res => {
+        console.log(res)
       })
     },
     submitValidatedForm () {
