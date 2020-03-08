@@ -98,6 +98,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <!-- Receiving Copy -->
     <q-dialog v-model="receiving_prompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
@@ -106,6 +107,11 @@
         <q-card-section class="q-pt-none">
           <q-input label="Reports" type="textarea" v-model="receiving_copy.reports" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
         </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input label="Attachment" type="file" v-model="receiving_copy.file" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+        </q-card-section>
+
         <q-card-section class="q-pt-none">
             <q-input label="Received by" v-model="receiving_copy.received_by" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
         </q-card-section>
@@ -134,6 +140,7 @@ export default {
       options: [],
       receiving_copy: {
         reports: null,
+        file: null,
         received_by: null,
         date_received: null
       },
