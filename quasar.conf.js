@@ -45,6 +45,7 @@ module.exports = function (ctx) {
       all: 'auto',
 
       components: [
+        'QDialog',
         'QIcon',
         'QCard',
         'QCardSection',
@@ -65,7 +66,9 @@ module.exports = function (ctx) {
         'QTd',
         'QForm'
       ],
-      directives: [],
+      directives: [
+        'ClosePopup'
+      ],
 
       // Quasar plugins
       plugins: [
@@ -122,9 +125,9 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'Senon-FE',
-        short_name: 'Senon-FE',
-        description: 'Senon-FE',
+        name: 'SENON INSURANCE ADJUSTERS & APPRAISERS',
+        short_name: 'Senon Insurance',
+        description: 'SENON INSURANCE ADJUSTERS & APPRAISERS',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
