@@ -65,19 +65,25 @@
           </q-item-section>
         </template>
         <q-list class="q-ml-lg">
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-bind:to="'/cms/settings/broker'">
             <q-item-section avatar>
               <q-icon color="blue-8" name="person" />
             </q-item-section>
             <q-item-section class="text-grey-8">Brokers</q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-bind:to="'/cms/settings/insurer'">
+            <q-item-section avatar>
+              <q-icon color="blue-8" name="perm_identity" />
+            </q-item-section>
+            <q-item-section class="text-grey-8">Insurer</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-bind:to="'/cms/settings/policy'">
             <q-item-section avatar>
               <q-icon color="blue-8" name="list" />
             </q-item-section>
             <q-item-section class="text-grey-8">Types of Policy</q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-bind:to="'/cms/settings/event_status'">
             <q-item-section avatar>
               <q-icon color="blue-8" name="all_inbox" />
             </q-item-section>
