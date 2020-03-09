@@ -82,6 +82,7 @@
       <q-btn label="Update" icon="done_all" color="primary" :disable="edit" type="submit"/>
     </div>
     </q-form>
+    <!-- Receiving Copy -->
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
@@ -118,10 +119,12 @@
         <q-card-section class="q-pt-none">
             <q-input label="Date Received" type="date" v-model="receiving_copy.date_received" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
         </q-card-section>
-
+        <q-card-section class="q-pt-none">
+            <q-select v-model="receiving_copy.status" :options="options" label="Event Status" />
+        </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Confirm" color="primary" v-close-popup />
+          <q-btn flat label="Cancel" type="button" v-close-popup />
+          <q-btn label="Confirm" type="submit" @click="submitCopy()" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -142,7 +145,8 @@ export default {
         reports: null,
         file: null,
         received_by: null,
-        date_received: null
+        date_received: null,
+        status: null
       },
       form: {
         date_assigned: null,
@@ -170,10 +174,22 @@ export default {
     this.getStatusListInfo()
   },
   methods: {
+    submitCopy () {
+
+    },
     onSubmit () {
-      this.$refs.myForm.validate().then(success => {
+      this.$refs.copyForm.validate().then(success => {
         if (success) {
           this.submitValidatedForm()
+        } else {
+
+        }
+      })
+    },
+    onCopy () {
+      this.$refs.myForm.validate().then(success => {
+        if (success) {
+          // this.submitValidatedForm()
         } else {
 
         }
@@ -183,7 +199,10 @@ export default {
       this.$axios.get('/api/status_lists').then(res => {
         const statList = []
         res.data.map(e => {
-          statList.push(e.status)
+          statList.push({
+            value: e.id,
+            label: e.status
+          })
         })
         this.options = statList
       })

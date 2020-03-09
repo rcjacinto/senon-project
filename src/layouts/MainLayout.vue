@@ -54,12 +54,44 @@
         <q-item-section>Borderaux</q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
+      <q-expansion-item class="bg-grey-4">
+        <template v-slot:header>
+          <q-item-section avatar>
           <q-icon color="secondary" name="settings" />
-        </q-item-section>
-        <q-item-section>Settings</q-item-section>
-      </q-item>
+          </q-item-section>
+
+          <q-item-section>
+            Setting
+          </q-item-section>
+        </template>
+        <q-list class="q-ml-lg">
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="blue-8" name="person" />
+            </q-item-section>
+            <q-item-section class="text-grey-8">Brokers</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="blue-8" name="list" />
+            </q-item-section>
+            <q-item-section class="text-grey-8">Types of Policy</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="blue-8" name="all_inbox" />
+            </q-item-section>
+            <q-item-section class="text-grey-8">Event Status</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon color="blue-8" name="group_work" />
+            </q-item-section>
+            <q-item-section class="text-grey-8">Users</q-item-section>
+          </q-item>
+        </q-list>
+      </q-expansion-item>
+     <!--  -->
       <q-separator></q-separator>
       <q-item clickable v-ripple>
         <q-item-section avatar>
