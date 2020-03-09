@@ -33,14 +33,14 @@
       Senon insurance Adjuster & Appraisers</p>
     </div>
 <q-list class="text-subtitle1">
-      <q-item clickable v-ripple v-bind:to="'/'">
+      <q-item clickable v-ripple v-bind:to="'/cms/'">
         <q-item-section avatar>
           <q-icon color="secondary" name="dashboard" />
         </q-item-section>
         <q-item-section>Dashboard</q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple v-bind:to="'/assignment'">
+      <q-item clickable v-ripple v-bind:to="'/cms/assignment'">
         <q-item-section avatar>
           <q-icon color="secondary" name="assignment" />
         </q-item-section>
@@ -93,7 +93,7 @@
       </q-expansion-item>
      <!--  -->
       <q-separator></q-separator>
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple v-bind:to="'/'">
         <q-item-section avatar>
           <q-icon color="secondary" name="power_settings_new" />
         </q-item-section>

@@ -2,12 +2,12 @@
   <q-page padding>
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs class="text-right">
-        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/assignment" />
+        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/cms/assignment" />
         <q-breadcrumbs-el label="Listing" icon="list" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-      <q-btn color="primary" label="Create New Assignment" v-bind:to="'/assignment/create'"/>
+      <q-btn color="primary" label="Create New Assignment" v-bind:to="'/cms/assignment/create'"/>
     </div>
     <div class="q-pa-md">
       <q-table
@@ -26,7 +26,7 @@
           <q-td>{{props.row.third_party}}</q-td>
           <q-td>{{props.row.date_loss}}</q-td>
           <q-td>{{props.row.status}}</q-td>
-          <q-td><q-btn color="primary" label="View" v-bind:to="'/assignment/modify/'+props.row.id" size="sm" icon="search"/></q-td>
+          <q-td><q-btn color="primary" label="View" v-bind:to="'/cms/assignment/modify/'+props.row.id" size="sm" icon="search"/></q-td>
         </q-tr>
       </q-table>
     </div>

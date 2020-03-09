@@ -2,7 +2,7 @@
   <q-page padding>
      <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs class="text-right">
-        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/assignment" />
+        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/cms/assignment" />
         <q-breadcrumbs-el label="Create New Assignment" icon="assignment_turned_in" />
       </q-breadcrumbs>
     </div>
@@ -140,7 +140,7 @@ export default {
           message: 'Record has been created successfully',
           position: 'top-right'
         })
-        this.$router.push('/assignment')
+        this.$router.push('/cms/assignment')
       }).catch((err) => {
         this.$q.notify({
           color: 'negative',

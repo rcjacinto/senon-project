@@ -2,7 +2,7 @@
   <q-page padding>
      <div class="q-pa-md ">
       <q-breadcrumbs class="text-right">
-        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/assignment" />
+        <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/cms/assignment" />
         <q-breadcrumbs-el label="Assignment Details" icon="assignment_turned_in" />
       </q-breadcrumbs>
     </div>
