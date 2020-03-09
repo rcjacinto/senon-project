@@ -45,7 +45,7 @@
       <div class="col-sm-12 col-md-5 col-lg-5 q-pa-md">
         <q-card class="my-card">
         <q-card-section>
-          <div class="text-h6 q-mb-xs">Announcement</div>
+          <div class="text-h6 q-mb-xs">Announcements</div>
         </q-card-section>
           <q-list>
             <q-item clickable>
