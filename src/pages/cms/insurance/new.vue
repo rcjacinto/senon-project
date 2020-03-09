@@ -20,7 +20,7 @@
             <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Type of Policy" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-select v-model="form.pol_type" :options="policies" label="Type of Policy" stack-label/>
           </div>
           <div class="col q-ma-sm">
             <q-input label="Policy No." v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
@@ -53,16 +53,16 @@
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Adjuster" v-model="form.adjuster" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-select v-model="form.adjuster" :options="adjuster" label="Adjuster" stack-label/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Insurer" v-model="form.insurer" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-select v-model="form.insurer" :options="insurer" label="Insurer" stack-label/>
           </div>
           <div class="col q-ma-sm">
             <q-input label="Third Party" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Broker" v-model="form.broker" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-select v-model="form.broker" :options="broker" label="Broker" stack-label/>
           </div>
       </div>
       <!-- Break -->
@@ -87,6 +87,10 @@ export default {
   // name: 'PageName',
   data () {
     return {
+      policies: [],
+      broker: [],
+      adjuster: [],
+      insurer: [],
       form: {
         date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
         ref_no: null,
@@ -107,6 +111,14 @@ export default {
         created_by: 'admin'
       }
     }
+  },
+  created () {
+    this.$q.loading.show()
+    this.getPolicy()
+    this.getInsurer()
+    this.getAdjuster()
+    this.getBroker()
+    this.$q.loading.hide()
   },
   methods: {
     onSubmit () {
@@ -136,6 +148,62 @@ export default {
           position: 'top-right'
         })
         this.$q.loading.hide()
+      })
+    },
+    getAdjuster () {
+      /* Adjusters */
+      this.$axios.get('/api/adjuster').then(res => {
+        console.log(res)
+        this.adjuster = res.data.map(re => {
+          return {
+            label: re.adjuster,
+            value: re.id
+          }
+        })
+      }).catch(err => {
+        console.log(err.response.data)
+      })
+    },
+    getBroker () {
+      /* Brokers */
+      this.$axios.get('/api/brokers').then(res => {
+        this.broker = res.data.map(re => {
+          return {
+            label: re.broker,
+            value: re.id
+          }
+        })
+        console.log(this.broker)
+      }).catch(err => {
+        console.log(err.response.data)
+      })
+    },
+    getInsurer () {
+      /* Insurers */
+      this.$axios.get('/api/insurer').then(res => {
+        console.log(res)
+        this.insurer = res.data.map(re => {
+          return {
+            label: re.insurer,
+            value: re.id
+          }
+        })
+      }).catch(err => {
+        console.log(err.response.data)
+      })
+    },
+    getPolicy () {
+      /* Policies */
+      this.$axios.get('/api/policy').then(res => {
+        console.log(res)
+        this.policies = res.data.map(re => {
+          return {
+            label: re.policy_type,
+            value: re.id
+          }
+        })
+      }).catch(err => {
+        console.log(err.response.data)
       })
     }
   }
