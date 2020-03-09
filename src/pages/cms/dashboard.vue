@@ -37,7 +37,7 @@
           <q-card-section class="text-white">
 
             <!-- <q-icon name="all_inbox" style="font-size:48px;"/> -->
-            <div><LineDashboard /></div>
+            <div><LineDashboard :data.sync="chart" /></div>
           </q-card-section>
 
         </q-card>
@@ -87,10 +87,47 @@
   </q-page>
 </template>
 <script>
-import LineDashboard from '../../components/LineDashboard'
+import LineDashboard from '../../components/BarDashboard'
 export default {
   components: {
     LineDashboard
+  },
+  data () {
+    return {
+      chart: {
+        label: [],
+        dataset: [
+          {
+            label: 'Active',
+            backgroundColor: 'lightblue',
+            borderColor: 'blue',
+            borderWidth: 1,
+            data: []
+          },
+          {
+            label: 'Completed',
+            backgroundColor: 'lightgreen',
+            borderColor: 'green',
+            borderWidth: 1,
+            data: []
+          }
+        ]
+      }
+    }
+  },
+  mounted () {
+    this.getBarReport()
+  },
+  methods: {
+    async getBarReport () {
+      await this.$axios.get('/api/graphs/cases_per_adjuster').then(result => {
+        result.data.forEach((element, index) => {
+          this.chart.label.push(element.adjuster)
+          this.chart.dataset[0].data.push(element.active)
+          this.chart.dataset[1].data.push(element.completed)
+        })
+      })
+    }
   }
   // name: 'PageName',
 }
