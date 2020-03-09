@@ -6,7 +6,7 @@
           <q-card-section class="bg-primary text-white">
 
             <q-icon name="all_inbox" style="font-size:48px;"/>
-            <div class="text-h6">Reports</div>
+            <div class="text-h6">Borderaux</div>
           </q-card-section>
 
         </q-card>

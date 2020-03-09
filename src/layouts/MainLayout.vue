@@ -51,7 +51,7 @@
         <q-item-section avatar>
           <q-icon color="secondary" name="print" />
         </q-item-section>
-        <q-item-section>Reports</q-item-section>
+        <q-item-section>Borderaux</q-item-section>
       </q-item>
 
       <q-item clickable v-ripple>

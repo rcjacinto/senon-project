@@ -19,6 +19,8 @@
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td class="text-green-9">{{props.row.date_assigned}}</q-td>
           <q-td>{{props.row.ref_no}}</q-td>
+          <q-td>{{props.row.insurer}}</q-td>
+          <q-td>{{props.row.broker}}</q-td>
           <q-td>{{props.row.adjuster}}</q-td>
           <q-td>{{props.row.name_insured}}</q-td>
           <q-td>{{props.row.third_party}}</q-td>
@@ -46,9 +48,11 @@ export default {
       columns: [
         { align: 'left', name: 'date_assigned', label: 'Date Assigned', field: 'date_assigned', sortable: true },
         { align: 'left', name: 'ref_num', label: 'Reference Number', field: 'ref_no', sortable: true },
+        { align: 'left', name: 'insurer', label: 'Insurance', field: 'insurer', sortable: true },
+        { align: 'left', name: 'broker', label: 'Broker', field: 'broker', sortable: true },
         { align: 'left', name: 'adjust', label: 'Adjuster', field: 'adjuster' },
         { align: 'left', name: 'insured', label: 'Insured', field: 'name_insured' },
-        { align: 'left', name: 'third', label: 'Third Party', field: 'third_party' },
+        { align: 'left', name: 'third', label: 'Claimant', field: 'third_party' },
         { align: 'left', name: 'aging', label: 'Aging', field: 'date_loss', sortable: true },
         { align: 'left', name: 'status', label: 'Status', field: 'status', sortable: true },
         { align: 'left', name: 'action', label: 'Action', field: 'action', sortable: false }

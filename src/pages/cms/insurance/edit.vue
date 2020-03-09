@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-     <div class="q-pa-md q-gutter-sm">
+     <div class="q-pa-md ">
       <q-breadcrumbs class="text-right">
         <q-breadcrumbs-el label="Insurance Assignment" icon="assignment" to="/assignment" />
         <q-breadcrumbs-el label="Assignment Details" icon="assignment_turned_in" />
@@ -11,72 +11,120 @@
       ref="myForm"
       >
     <div class="q-pa-md">
-      <p class="text-h5">Create Assignment</p>
+      <p class="text-h5">Manage Assignment</p>
       <div class="row">
-          <!-- <div class="col q-ma-sm">
-            <q-input label="Reference Number" type="hidden" v-model="form.ref_no" stack-label/>
-          </div> -->
+        <div class="col-5"><q-btn icon="edit" label="Edit Details" class="q-ma-sm" @click="edit =!edit" color="primary" v-if="edit"/>
+        <q-btn icon="compare" label="Receiving Copy" color="blue-5" @click="receiving_prompt =!receiving_prompt" class="q-ma-sm"/></div>
+        <div class="col-7 text-right"><q-btn color="primary" label="Manage Status"  @click="prompt = true"/></div>
+      </div>
+      <div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Reference Number" readonly v-model="form.ref_no" stack-label/>
+          </div>
           <div class="col q-ma-sm">
             <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Type of Policy" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Type of Policy" :disable="edit" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Policy No." v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Policy No." :disable="edit" v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
-          <q-input label="Insured" stack-label v-model="form.name_insured" :rules="[ val => val && val.length > 0 || 'Required']"/>
+          <q-input label="Insured" :disable="edit" stack-label v-model="form.name_insured" :rules="[ val => val && val.length > 0 || 'Required']"/>
         </div>
       </div>
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
-          <q-input label="Location of Risk" stack-label v-model="form.risk_location" :rules="[ val => val && val.length > 0 || 'Required']"/>
+          <q-input label="Location of Risk" :disable="edit" stack-label v-model="form.risk_location" :rules="[ val => val && val.length > 0 || 'Required']"/>
         </div>
       </div>
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Nature of Loss" v-model="form.nature_loss" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Nature of Loss" :disable="edit" v-model="form.nature_loss" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Date of Loss" v-model="form.date_loss" stack-label type="date" :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Date of Loss" :disable="edit" v-model="form.date_loss" stack-label type="date" :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Loss Reserve" v-model="form.loss_reserve" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Loss Reserve" :disable="edit" v-model="form.loss_reserve" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Adjuster" v-model="form.adjuster" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Adjuster" :disable="edit" v-model="form.adjuster" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Insurer" v-model="form.insurer" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Insurer" :disable="edit" v-model="form.insurer" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Third Party" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Third Party" :disable="edit" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Broker" v-model="form.broker" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Broker" :disable="edit" v-model="form.broker" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
-          <q-input label="Remarks" stack-label v-model="form.remarks" type="textarea"/>
+          <q-input label="Remarks" :disable="edit" stack-label v-model="form.remarks" type="textarea"/>
         </div>
       </div>
     </div>
     <!-- Break -->
-    <!-- <div class="q-pa-md">
-      <q-btn label="Create" icon="done" color="primary" type="submit"/>
-    </div> -->
+    <div class="q-pa-md">
+      <q-btn label="Update" icon="done_all" color="primary" :disable="edit" type="submit"/>
+    </div>
     </q-form>
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Status</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+            <q-select v-model="form.status_id_list" :options="options" label="Event Status" />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Confirm" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <!-- Receiving Copy -->
+    <q-dialog v-model="receiving_prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Receiving Copy</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input label="Reports" type="textarea" v-model="receiving_copy.reports" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input label="Attachment" type="file" v-model="receiving_copy.file" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+            <q-input label="Received by" v-model="receiving_copy.received_by" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+            <q-input label="Date Received" type="date" v-model="receiving_copy.date_received" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Confirm" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -86,6 +134,16 @@ export default {
   // name: 'PageName',
   data () {
     return {
+      edit: true,
+      prompt: false,
+      receiving_prompt: false,
+      options: [],
+      receiving_copy: {
+        reports: null,
+        file: null,
+        received_by: null,
+        date_received: null
+      },
       form: {
         date_assigned: null,
         ref_no: null,
@@ -109,6 +167,7 @@ export default {
   },
   created () {
     this.getAssignmentInfo()
+    this.getStatusListInfo()
   },
   methods: {
     onSubmit () {
@@ -120,10 +179,19 @@ export default {
         }
       })
     },
+    getStatusListInfo () {
+      this.$axios.get('/api/status_lists').then(res => {
+        const statList = []
+        res.data.map(e => {
+          statList.push(e.status)
+        })
+        this.options = statList
+      })
+    },
     getAssignmentInfo () {
       const assignId = this.$route.params.id
-      this.$axios.get('/api/assignment/' + assignId).then(res => {
-        console.log(res)
+      this.$axios.get('/api/assignment/edit/' + assignId).then(res => {
+        this.form = res.data
       })
     },
     submitValidatedForm () {
