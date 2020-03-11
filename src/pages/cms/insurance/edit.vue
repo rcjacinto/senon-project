@@ -124,7 +124,7 @@
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" type="button" v-close-popup />
-          <q-btn label="Confirm" type="submit" @click="submitCopy()" color="primary" v-close-popup />
+          <q-btn label="Confirm" type="submit" @click="submitReceivingCopy()" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -174,22 +174,10 @@ export default {
     this.getStatusListInfo()
   },
   methods: {
-    submitCopy () {
-
-    },
     onSubmit () {
       this.$refs.copyForm.validate().then(success => {
         if (success) {
           this.submitValidatedForm()
-        } else {
-
-        }
-      })
-    },
-    onCopy () {
-      this.$refs.myForm.validate().then(success => {
-        if (success) {
-          // this.submitValidatedForm()
         } else {
 
         }
@@ -224,6 +212,34 @@ export default {
           position: 'top-right'
         })
         this.$router.push('/assignment')
+      }).catch((err) => {
+        this.$q.notify({
+          color: 'negative',
+          message: err.response.data.message,
+          position: 'top-right'
+        })
+        this.$q.loading.hide()
+      })
+    },
+    submitReceivingCopy () {
+      let data = new FormData()
+      data.append('attachment', this.receiving_copy.file[0])
+      data.append('received_date', this.receiving_copy.date_received)
+      data.append('status_list_id', this.receiving_copy.status.value)
+      data.append('received_by', this.receiving_copy.received_by)
+      data.append('assignment_id', this.$route.params.id)
+      this.$q.loading.show()
+      this.$axios.post('/api/receiving', data, {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        this.$q.loading.hide()
+        this.$q.notify({
+          color: 'positive',
+          message: 'Receiving Copy has been created successfully',
+          position: 'top-right'
+        })
       }).catch((err) => {
         this.$q.notify({
           color: 'negative',
