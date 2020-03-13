@@ -228,6 +228,7 @@ export default {
       data.append('status_list_id', this.receiving_copy.status.value)
       data.append('received_by', this.receiving_copy.received_by)
       data.append('assignment_id', this.$route.params.id)
+      data.append('report_submitted', this.receiving_copy.reports)
       this.$q.loading.show()
       this.$axios.post('/api/receiving', data, {
         header: {
