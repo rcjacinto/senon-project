@@ -106,7 +106,7 @@
           <div class="text-h6">Receiving Copy</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input label="Reports" type="textarea" v-model="receiving_copy.reports" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          <q-select v-model="receiving_copy.reports" :options="reportOptions" label="Report" />
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -141,6 +141,7 @@ export default {
       prompt: false,
       receiving_prompt: false,
       options: [],
+      reportOptions: [],
       receiving_copy: {
         reports: null,
         file: null,
@@ -172,6 +173,7 @@ export default {
   created () {
     this.getAssignmentInfo()
     this.getStatusListInfo()
+    this.getReportsListInfo()
   },
   methods: {
     onSubmit () {
@@ -193,6 +195,18 @@ export default {
           })
         })
         this.options = statList
+      })
+    },
+    getReportsListInfo () {
+      this.$axios.get('/api/report_lists').then(res => {
+        const reportList = []
+        res.data.map(e => {
+          reportList.push({
+            value: e.id,
+            label: e.report
+          })
+        })
+        this.reportOptions = reportList
       })
     },
     getAssignmentInfo () {
@@ -228,7 +242,8 @@ export default {
       data.append('status_list_id', this.receiving_copy.status.value)
       data.append('received_by', this.receiving_copy.received_by)
       data.append('assignment_id', this.$route.params.id)
-      data.append('report_submitted', this.receiving_copy.reports)
+      data.append('report_submitted_id', this.receiving_copy.reports.value)
+      data.append('report_submitted', this.receiving_copy.reports.label)
       this.$q.loading.show()
       this.$axios.post('/api/receiving', data, {
         header: {

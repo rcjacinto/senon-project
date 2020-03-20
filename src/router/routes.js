@@ -2,6 +2,9 @@
 const routes = [
   {
     path: '/cms',
+    meta: {
+      requiresAuth: true
+    },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/cms/dashboard.vue') },

@@ -20,7 +20,7 @@
             </q-input>
           </div>
           <div class="col q-ma-sm q-mt-xl">
-            <q-btn label="Login" rounded color="primary" class="full-width" v-bind:to="'/cms'"/>
+            <q-btn label="Login" rounded color="primary" class="full-width"/>
           </div>
           <div class="col q-ma-sm q-mt-lg">
             <q-btn label="Forgot Password ?" flat color="red-5" class="full-width"/>
