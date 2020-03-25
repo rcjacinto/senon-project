@@ -30,7 +30,6 @@ export default function (/* { store, ssrContext } */) {
     console.log(to.matched.some(record => record.meta.requiresAuth))
     if (to.matched.some(record => record.meta.requiresAuth)) {
       const user = localStorage.getItem('loginInfo')
-      console.log(user)
       if (user === null) {
         next({
           path: '/'

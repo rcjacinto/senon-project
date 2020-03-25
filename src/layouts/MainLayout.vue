@@ -99,7 +99,7 @@
       </q-expansion-item>
      <!--  -->
       <q-separator></q-separator>
-      <q-item clickable v-ripple v-bind:to="'/'">
+      <q-item clickable v-ripple @click="logout">
         <q-item-section avatar>
           <q-icon color="secondary" name="power_settings_new" />
         </q-item-section>
@@ -123,6 +123,19 @@ export default {
   data () {
     return {
       leftDrawerOpen: false
+    }
+  },
+
+  methods: {
+    logout () {
+      this.$axios.post('/api/logout', {})
+        .then((response) => {
+          localStorage.removeItem('loginInfo')
+          this.$router.push({ path: '/' })
+        })
+        .catch((error) => {
+          console.warn(error)
+        })
     }
   }
 }
