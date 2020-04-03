@@ -37,7 +37,7 @@
 export default {
   data () {
     return {
-      tableData: '',
+      tableData: [],
       pagination: {
         sortBy: 'desc',
         descending: false,
@@ -65,7 +65,6 @@ export default {
         let result = []
         result = res.data.data
         this.tableData = result
-        console.log(this.tableData)
       })
     }
   },
