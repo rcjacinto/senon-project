@@ -54,7 +54,7 @@ export default {
       broker: '',
       id: '',
       actionType: 'view',
-      tableData: '',
+      tableData: [],
       pagination: {
         sortBy: 'desc',
         descending: false,
@@ -124,7 +124,6 @@ export default {
         let result = []
         result = res.data
         this.tableData = result
-        console.log(this.tableData)
       })
     }
   },
