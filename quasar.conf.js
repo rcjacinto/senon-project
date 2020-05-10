@@ -169,7 +169,6 @@ module.exports = function (ctx) {
       id: 'com.senon-insurance.app'
     },
 
-
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true
