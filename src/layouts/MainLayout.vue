@@ -89,7 +89,7 @@
             </q-item-section>
             <q-item-section class="text-grey-8">Event Status</q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-bind:to="'/cms/settings/users'">
             <q-item-section avatar>
               <q-icon color="blue-8" name="group_work" />
             </q-item-section>

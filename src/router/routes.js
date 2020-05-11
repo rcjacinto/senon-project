@@ -14,7 +14,8 @@ const routes = [
       { path: 'settings/broker', component: () => import('pages/cms/settings/broker/index.vue') },
       { path: 'settings/insurer', component: () => import('pages/cms/settings/insurer/index.vue') },
       { path: 'settings/event_status', component: () => import('pages/cms/settings/event_status/index.vue') },
-      { path: 'settings/policy', component: () => import('pages/cms/settings/policy/index.vue') }
+      { path: 'settings/policy', component: () => import('pages/cms/settings/policy/index.vue') },
+      { path: 'settings/users', component: () => import('pages/cms/user/index.vue') }
     ]
   },
   {
