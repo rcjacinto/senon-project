@@ -38,7 +38,8 @@
     >
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td class="text-green-9">{{props.row.id}}</q-td>
-          <q-td>{{props.row.user}}</q-td>
+          <q-td>{{props.row.fullName}}</q-td>
+          <q-td>{{props.row.email}}</q-td>
           <q-td>
             <q-btn @click="openDialog('view', props.row)" color="grey-8" label="View" size="sm" icon="search"/>
             &nbsp;
@@ -51,7 +52,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { firebaseAuth, firebaseDb } from 'boot/firebase'
+
 export default {
   data () {
     return {
@@ -73,7 +75,8 @@ export default {
       },
       columns: [
         { align: 'left', name: 'id', label: '#', field: 'id', sortable: true },
-        { align: 'left', name: 'user', label: 'User Name', field: 'user', sortable: true },
+        { align: 'left', name: 'fullName', label: 'Full Name', field: 'fullName', sortable: true },
+        { align: 'left', name: 'email', label: 'Email', field: 'email', sortable: true },
         { align: 'left', name: 'action', label: 'Action', field: 'action', sortable: false }
       ],
       userLevel: [
@@ -107,7 +110,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('store', ['createUser']),
     openDialog (value, data) {
       this.actionType = value
       this.prompt = true
@@ -130,7 +132,25 @@ export default {
         name: this.fullName,
         userType: this.userType
       }
-      this.createUser(payload)
+      firebaseAuth.createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(res => {
+          /* CREATE RECORD ON DB */
+          let userId = firebaseAuth.currentUser.uid
+          firebaseDb.doc('users/' + userId).set({
+            fullName: payload.name,
+            email: payload.email,
+            userType: payload.userType
+          })
+          this.$q.notify({
+            color: 'positive',
+            message: `Record has been added successfully`,
+            position: 'top-right'
+          })
+          this.getListingData()
+        })
+        .catch(err => {
+          return err
+        })
     },
     performAction2 () {
       this.$q.loading.show()
@@ -157,17 +177,19 @@ export default {
         this.$q.loading.hide()
       })
     },
-    getListingData () {
-      // this.$axios.get('api/users').then(res => {
-      //   let result = []
-      //   result = res.data
-      //   this.tableData = result
-      // })
+    async getListingData () {
+      this.tableData = []
+      await firebaseDb.collection('users').get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.tableData.push({ id: doc.id, ...doc.data() })
+          })
+        })
+      console.log(this.tableData)
     }
   },
   created () {
-    // this.getListingData()
-    console.log(this.$store.state.db,'firesotre')
+    this.getListingData()
   }
 }
 </script>
