@@ -149,7 +149,12 @@ export default {
           this.getListingData()
         })
         .catch(err => {
-          return err
+          console.log(err)
+          this.$q.notify({
+            color: 'negative',
+            message: `Failed to create record`,
+            position: 'top-right'
+          })
         })
     },
     performAction2 () {
