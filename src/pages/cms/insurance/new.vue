@@ -23,7 +23,7 @@
             <q-select v-model="form.pol_type" :options="policies" label="Type of Policy" stack-label/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Policy No." v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Policy No." v-model="form.pol_no" stack-label />
           </div>
       </div>
       <!-- Break -->
@@ -47,7 +47,7 @@
             <q-input label="Date of Loss" v-model="form.date_loss" stack-label type="date" :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Loss Reserve" v-model="form.loss_reserve" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Loss Reserve" v-model="form.loss_reserve" stack-label />
           </div>
       </div>
       <!-- Break -->
@@ -59,12 +59,22 @@
             <q-select v-model="form.insurer" :options="insurer" label="Insurer" stack-label/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Third Party" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Third Party" v-model="form.third_party" stack-label />
           </div>
           <div class="col q-ma-sm">
             <q-select v-model="form.broker" :options="broker" label="Broker" stack-label/>
           </div>
       </div>
+      <!-- Break -->
+      <div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Contact Person" v-model="form.contact_person" stack-label />
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Contact Number" v-model="form.contact_number" stack-label />
+          </div>
+      </div>
+      <!-- Break -->
       <!-- Break -->
       <div class="row">
         <div class="col q-ma-sm">
@@ -103,7 +113,8 @@ export default {
         loss_reserve: null,
         adjuster: null,
         insurer: null,
-        contact_person: 91212345671,
+        contact_person: null,
+        contact_number: null,
         third_party: null,
         broker: null,
         remarks: null,

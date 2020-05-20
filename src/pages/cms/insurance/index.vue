@@ -23,7 +23,6 @@
           <q-td>{{props.row.broker}}</q-td>
           <q-td>{{props.row.adjuster}}</q-td>
           <q-td>{{props.row.name_insured}}</q-td>
-          <q-td>{{props.row.third_party}}</q-td>
           <q-td>{{props.row.date_loss}}</q-td>
           <q-td>{{props.row.status}}</q-td>
           <q-td><q-btn color="primary" label="View" v-bind:to="'/cms/assignment/modify/'+props.row.id" size="sm" icon="search"/></q-td>
@@ -52,7 +51,6 @@ export default {
         { align: 'left', name: 'broker', label: 'Broker', field: 'broker', sortable: true },
         { align: 'left', name: 'adjust', label: 'Adjuster', field: 'adjuster' },
         { align: 'left', name: 'insured', label: 'Insured', field: 'name_insured' },
-        { align: 'left', name: 'third', label: 'Claimant', field: 'third_party' },
         { align: 'left', name: 'aging', label: 'Aging', field: 'date_loss', sortable: true },
         { align: 'left', name: 'status', label: 'Status', field: 'status', sortable: true },
         { align: 'left', name: 'action', label: 'Action', field: 'action', sortable: false }

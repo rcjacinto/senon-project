@@ -8,7 +8,7 @@
     </div>
      <q-form
       @submit="onSubmit"
-      ref="myForm"
+      ref="copyForm"
       >
     <div class="q-pa-md">
       <p class="text-h5">Manage Assignment</p>
@@ -28,7 +28,7 @@
             <q-input label="Type of Policy" :disable="edit" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Policy No." :disable="edit" v-model="form.pol_no" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Policy No." :disable="edit" v-model="form.pol_no" stack-label />
           </div>
       </div>
       <!-- Break -->
@@ -52,7 +52,7 @@
             <q-input label="Date of Loss" :disable="edit" v-model="form.date_loss" stack-label type="date" :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Loss Reserve" :disable="edit" v-model="form.loss_reserve" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Loss Reserve" :disable="edit" v-model="form.loss_reserve" stack-label />
           </div>
       </div>
       <!-- Break -->
@@ -64,10 +64,19 @@
             <q-input label="Insurer" :disable="edit" v-model="form.insurer" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Third Party" :disable="edit" v-model="form.third_party" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Third Party" :disable="edit" v-model="form.third_party" stack-label />
           </div>
           <div class="col q-ma-sm">
             <q-input label="Broker" :disable="edit" v-model="form.broker" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+      </div>
+      <!-- Break -->
+      <div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Contact Person" :disable="edit" v-model="form.contact_person" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Contact Number" :disable="edit" v-model="form.contact_number" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
       </div>
       <!-- Break -->
@@ -161,7 +170,8 @@ export default {
         loss_reserve: null,
         adjuster: null,
         insurer: null,
-        contact_person: 91212345671,
+        contact_person: null,
+        contact_number: null,
         third_party: null,
         broker: null,
         remarks: null,
@@ -217,15 +227,18 @@ export default {
     },
     submitValidatedForm () {
       this.$q.loading.show()
-      this.$axios.post('/api/assignment', this.form).then(res => {
+      this.$axios.post('/api/assignment/' + this.$route.params.id, {
+        data: this.form,
+        _method: 'PATCH'
+      }).then(res => {
         this.$q.loading.hide()
         console.log(res)
         this.$q.notify({
           color: 'positive',
-          message: 'Record has been created successfully',
+          message: 'Record has been updated successfully',
           position: 'top-right'
         })
-        this.$router.push('/assignment')
+        this.$router.push('/cms/assignment')
       }).catch((err) => {
         this.$q.notify({
           color: 'negative',
