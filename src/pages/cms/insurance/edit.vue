@@ -73,10 +73,10 @@
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-input label="Contact Person" :disable="edit" v-model="form.contact_person" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Contact Person" :disable="edit" v-model="form.contact_person" stack-label />
           </div>
           <div class="col q-ma-sm">
-            <q-input label="Contact Number" :disable="edit" v-model="form.contact_number" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+            <q-input label="Contact Number" :disable="edit" v-model="form.contact_number" stack-label />
           </div>
       </div>
       <!-- Break -->
