@@ -33,14 +33,29 @@
     </div>
     <div class="row items-start">
       <div class="col-sm-12 col-md-7 col-lg-7 q-pa-md">
-        <q-card class="my-card">
-          <q-card-section class="text-white">
-
-            <!-- <q-icon name="all_inbox" style="font-size:48px;"/> -->
-            <div><LineDashboard :data.sync="chart" /></div>
-          </q-card-section>
-
-        </q-card>
+        <q-markup-table flat bordered square>
+          <thead class="bg-primary text-white">
+            <tr>
+              <th colspan="3">
+                <div class="row">
+                  <div class="text-h6 text-uppercase">Cases per adjuster</div>
+                </div>
+              </th>
+            </tr>
+            <tr>
+              <th class="text-left text-uppercase">Adjuster</th>
+              <th class="text-right text-uppercase">Active</th>
+              <th class="text-right text-uppercase">Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in cases" v-bind:key="item.adjuster">
+              <td class="text-left">{{ item.adjuster }}</td>
+              <td class="text-right">{{ item.active }}</td>
+              <td class="text-right">{{ item.completed }}</td>
+            </tr>
+          </tbody>
+        </q-markup-table>
       </div>
       <div class="col-sm-12 col-md-5 col-lg-5 q-pa-md">
         <q-card class="my-card">
@@ -87,32 +102,10 @@
   </q-page>
 </template>
 <script>
-import LineDashboard from '../../components/BarDashboard'
 export default {
-  components: {
-    LineDashboard
-  },
   data () {
     return {
-      chart: {
-        label: [],
-        dataset: [
-          {
-            label: 'Active',
-            backgroundColor: 'lightblue',
-            borderColor: 'blue',
-            borderWidth: 1,
-            data: []
-          },
-          {
-            label: 'Completed',
-            backgroundColor: 'lightgreen',
-            borderColor: 'green',
-            borderWidth: 1,
-            data: []
-          }
-        ]
-      }
+      cases: []
     }
   },
   mounted () {
@@ -121,11 +114,8 @@ export default {
   methods: {
     async getBarReport () {
       await this.$axios.get('/api/graphs/cases_per_adjuster').then(result => {
-        result.data.forEach((element, index) => {
-          this.chart.label.push(element.adjuster)
-          this.chart.dataset[0].data.push(element.active)
-          this.chart.dataset[1].data.push(element.completed)
-        })
+        this.cases = result.data
+        console.log(this.cases)
       })
     }
   }
