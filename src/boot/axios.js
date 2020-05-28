@@ -2,7 +2,9 @@ import Vue from 'vue'
 import axios from 'axios'
 
 Vue.prototype.$axios = axios
-export default ({ Vue }) => {
+export default ({
+  Vue
+}) => {
   axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8;application/x-www-form-urlencoded'
   axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
   axios.defaults.baseURL = 'http://18.162.116.197/'

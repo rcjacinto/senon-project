@@ -17,10 +17,15 @@
         <q-btn icon="compare" label="Receiving Copy" color="blue-5" @click="receiving_prompt =!receiving_prompt" class="q-ma-sm"/></div>
         <div class="col-7 text-right"><q-btn color="primary" label="Manage Status"  @click="prompt = true"/></div>
       </div>
+			<div class="row">
+				<div class="col q-ma-sm">
+					<q-input label="Reference Number" :disable="edit" v-model="form.ref_no" stack-label/>
+				</div>
+				<div class="col q-ma-sm">
+					<q-input label="Claim Number" :disable="edit" v-model="form.claim_num" stack-label/>
+				</div>
+			</div>
       <div class="row">
-          <div class="col q-ma-sm">
-            <q-input label="Reference Number" readonly v-model="form.ref_no" stack-label/>
-          </div>
           <div class="col q-ma-sm">
             <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
           </div>
@@ -91,6 +96,46 @@
       <q-btn label="Update" icon="done_all" color="primary" :disable="edit" type="submit"/>
     </div>
     </q-form>
+
+		<!-- Attachments -->
+		<div class="q-pa-md">
+			<p class="text-h6">Attachments</p>
+			<div v-if="!attachments.length">
+				<p class="text-h6">No attachments found</p>
+			</div>
+			<div v-else>
+				<q-markup-table dense bordered>
+					<thead>
+						<tr class="text-uppercase">
+							<th class="text-left">File Name</th>
+							<th class="text-left">Report</th>
+							<th class="text-left">Status</th>
+							<th class="text-left">Received By</th>
+							<th class="text-left">Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item, id) in attachments" v-bind:key="id">
+							<td class="text-left">
+								<a
+									class="q-mr-sm"
+									:href="'http://localhost/senon-be/public/storage/' + item.attachment"
+									target="_blank"
+								>
+									{{ item.attachment }}
+								</a>
+							</td>
+							<td class="text-left">{{ item.report }}</td>
+							<td class="text-left">{{ item.status }}</td>
+							<td class="text-left">{{ item.received_by }}</td>
+							<td class="text-left">{{ item.received_date }}</td>
+						</tr>
+					</tbody>
+				</q-markup-table>
+			</div>
+		</div>
+		<!-- Attachments -->
+
     <!-- Receiving Copy -->
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -99,7 +144,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-            <q-select v-model="form.status_id_list" :options="options" label="Event Status" />
+					<q-select v-model="form.status_id_list" :options="options" label="Event Status" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -160,7 +205,8 @@ export default {
       },
       form: {
         date_assigned: null,
-        ref_no: null,
+				ref_no: null,
+				claim_num: null,
         pol_type: null,
         pol_no: null,
         name_insured: null,
@@ -177,11 +223,13 @@ export default {
         remarks: null,
         status_list_id: 1,
         created_by: 'admin'
-      }
+			},
+			attachments: []
     }
   },
   created () {
-    this.getAssignmentInfo()
+		this.getAssignmentInfo()
+		this.getAttachmentInfo()
     this.getStatusListInfo()
     this.getReportsListInfo()
   },
@@ -224,7 +272,13 @@ export default {
       this.$axios.get('/api/assignment/edit/' + assignId).then(res => {
         this.form = res.data
       })
-    },
+		},
+		getAttachmentInfo () {
+			const assignId = this.$route.params.id
+			this.$axios.get('/api/receiving?assignment_id=' + assignId).then(res => {
+				this.attachments = res.data.data
+			})
+		},
     submitValidatedForm () {
       this.$q.loading.show()
       this.$axios.post('/api/assignment/' + this.$route.params.id, {

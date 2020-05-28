@@ -13,11 +13,11 @@
     <div class="q-pa-md">
       <p class="text-h5">Create Assignment</p>
       <div class="row">
-          <!-- <div class="col q-ma-sm">
-            <q-input label="Reference Number" type="hidden" v-model="form.ref_no" stack-label/>
-          </div> -->
           <div class="col q-ma-sm">
             <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
+          </div>
+					<div class="col q-ma-sm">
+            <q-input label="Claim Number" v-model="form.claim_num" stack-label/>
           </div>
           <div class="col q-ma-sm">
             <q-select v-model="form.pol_type" :options="policies" label="Type of Policy" stack-label/>
@@ -102,8 +102,8 @@ export default {
       adjuster: [],
       insurer: [],
       form: {
-        date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
-        ref_no: null,
+				date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
+				claim_num: null,
         pol_type: null,
         pol_no: null,
         name_insured: null,

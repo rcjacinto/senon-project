@@ -28,11 +28,19 @@
 						</template>
 					</q-input>
 				</template>
-				<template v-slot:body-cell-action="cellProperties">
-					<q-td :props="cellProperties">
+				<template v-slot:body-cell-aging="agingProperty">
+					<q-td :props="agingProperty">
+						<timeago
+              :datetime="agingProperty.value"
+              :auto-update="60"
+            ></timeago>
+					</q-td>
+				</template>
+				<template v-slot:body-cell-action="actionProperty">
+					<q-td :props="actionProperty">
 						<router-link
 							class="q-mr-sm"
-							:to="{ path: '/cms/assignment/modify/' + cellProperties.value }"
+							:to="{ path: '/cms/assignment/modify/' + actionProperty.value }"
 						>
 							<q-btn
 								flat
@@ -50,6 +58,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueTimeago from 'vue-timeago'
+
+Vue.use(VueTimeago, {
+	name: 'Timeago', // Component name, `Timeago` by default
+	locale: 'en', // Default locale
+})
+
 export default {
   data () {
     return {
@@ -74,12 +90,21 @@ export default {
         },
 				{ align: 'left', name: 'date_assigned', label: 'Date Assigned', field: 'date_assigned', sortable: true },
         { align: 'left', name: 'ref_num', label: 'Reference Number', field: 'ref_no', sortable: true },
+        { align: 'left', name: 'claim_num', label: 'Claim Number', field: 'claim_num', sortable: true },
         { align: 'left', name: 'insurer', label: 'Insurance', field: 'insurer', sortable: true },
         { align: 'left', name: 'broker', label: 'Broker', field: 'broker', sortable: true },
         { align: 'left', name: 'adjust', label: 'Adjuster', field: 'adjuster' },
         { align: 'left', name: 'insured', label: 'Insured', field: 'name_insured' },
-        { align: 'left', name: 'aging', label: 'Aging', field: 'date_loss', sortable: true },
         { align: 'left', name: 'status', label: 'Status', field: 'status', sortable: true },
+        {
+					align: 'left',
+					name: 'aging',
+					label: 'Aging',
+					field: 'created_at',
+					field: row => row.created_at,
+					format: val => `${val}`,
+					sortable: true
+				},
         {
           name: 'action',
           label: 'ACTION',
@@ -141,6 +166,9 @@ export default {
           let count = 0
           response.data.data.forEach(data => {
             if (data['ref_no'].includes(filter)) {
+              ++count
+						}
+						if (data['claim_num'].includes(filter)) {
               ++count
             }
             if (data['insurer'].includes(filter)) {
