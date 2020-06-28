@@ -12,15 +12,20 @@
       >
     <div class="q-pa-md">
       <p class="text-h5">Create Assignment</p>
+			<div class="row">
+				<div class="col q-ma-sm">
+					<q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
+				</div>
+				<div class="col q-ma-sm">
+					<q-input label="Date Inspected" v-model="form.date_inspected" stack-label type="date"/>
+				</div>
+			</div>
       <div class="row">
-          <div class="col q-ma-sm">
-            <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
-          </div>
 					<div class="col q-ma-sm">
             <q-input label="Claim Number" v-model="form.claim_num" stack-label/>
           </div>
           <div class="col q-ma-sm">
-            <q-select v-model="form.pol_type" :options="policies" label="Type of Policy" stack-label/>
+            <q-select v-model="form.pol_type" :options="policies" emit-value label="Type of Policy" stack-label/>
           </div>
           <div class="col q-ma-sm">
             <q-input label="Policy No." v-model="form.pol_no" stack-label />
@@ -53,16 +58,16 @@
       <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
-            <q-select v-model="form.adjuster" :options="adjuster" label="Adjuster" stack-label/>
+            <q-select v-model="form.adjuster" :options="adjuster" emit-value label="Adjuster" stack-label/>
           </div>
           <div class="col q-ma-sm">
-            <q-select v-model="form.insurer" :options="insurer" label="Insurer" stack-label/>
+            <q-select v-model="form.insurer" :options="insurer" emit-value label="Insurer" stack-label/>
           </div>
           <div class="col q-ma-sm">
             <q-input label="Third Party" v-model="form.third_party" stack-label />
           </div>
           <div class="col q-ma-sm">
-            <q-select v-model="form.broker" :options="broker" label="Broker" stack-label/>
+            <q-select v-model="form.broker" :options="broker" emit-value label="Broker" stack-label/>
           </div>
       </div>
       <!-- Break -->
@@ -103,6 +108,7 @@ export default {
       insurer: [],
       form: {
 				date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
+				date_inspected: null,
 				claim_num: null,
         pol_type: null,
         pol_no: null,
@@ -168,7 +174,7 @@ export default {
         this.adjuster = res.data.map(re => {
           return {
             label: re.adjuster,
-            value: re.id
+            value: re.adjuster
           }
         })
       }).catch(err => {
@@ -181,7 +187,7 @@ export default {
         this.broker = res.data.map(re => {
           return {
             label: re.broker,
-            value: re.id
+            value: re.broker
           }
         })
         console.log(this.broker)
@@ -196,7 +202,7 @@ export default {
         this.insurer = res.data.map(re => {
           return {
             label: re.insurer,
-            value: re.id
+            value: re.insurer
           }
         })
       }).catch(err => {
@@ -210,7 +216,7 @@ export default {
         this.policies = res.data.map(re => {
           return {
             label: re.policy_type,
-            value: re.id
+            value: re.policy_type
           }
         })
       }).catch(err => {

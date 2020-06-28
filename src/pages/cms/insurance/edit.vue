@@ -29,6 +29,9 @@
           <div class="col q-ma-sm">
             <q-input label="Date Assigned" v-model="form.date_assigned" stack-label type="date" readonly/>
           </div>
+					<div class="col q-ma-sm">
+            <q-input label="Date Inspected" :disable="edit" v-model="form.date_inspected" stack-label type="date"/>
+          </div>
           <div class="col q-ma-sm">
             <q-input label="Type of Policy" :disable="edit" v-model="form.pol_type" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           </div>
@@ -119,7 +122,7 @@
 							<td class="text-left">
 								<a
 									class="q-mr-sm"
-									:href="'http://localhost/senon-be/public/storage/' + item.attachment"
+									:href="'http://18.162.116.197/storage/' + item.attachment"
 									target="_blank"
 								>
 									{{ item.attachment }}
@@ -164,7 +167,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input label="Attachment" type="file" v-model="receiving_copy.file" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          <q-input label="Attachment" type="file" v-model="receiving_copy.file" stack-label />
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -205,6 +208,7 @@ export default {
       },
       form: {
         date_assigned: null,
+				date_inspected: null,
 				ref_no: null,
 				claim_num: null,
         pol_type: null,
@@ -229,7 +233,6 @@ export default {
   },
   created () {
 		this.getAssignmentInfo()
-		this.getAttachmentInfo()
     this.getStatusListInfo()
     this.getReportsListInfo()
   },
@@ -270,11 +273,12 @@ export default {
     getAssignmentInfo () {
       const assignId = this.$route.params.id
       this.$axios.get('/api/assignment/edit/' + assignId).then(res => {
-        this.form = res.data
+				this.form = res.data
+				this.getAttachmentInfo(res.data.ref_no)
       })
 		},
-		getAttachmentInfo () {
-			const assignId = this.$route.params.id
+		getAttachmentInfo (ref_no) {
+			const assignId = ref_no
 			this.$axios.get('/api/receiving?assignment_id=' + assignId).then(res => {
 				this.attachments = res.data.data
 			})
@@ -304,11 +308,11 @@ export default {
     },
     submitReceivingCopy () {
       let data = new FormData()
-      data.append('attachment', this.receiving_copy.file[0])
+      data.append('attachment', (this.receiving_copy.file !== null) ? this.receiving_copy.file[0] : null)
       data.append('received_date', this.receiving_copy.date_received)
       data.append('status_list_id', this.receiving_copy.status.value)
       data.append('received_by', this.receiving_copy.received_by)
-      data.append('assignment_id', this.$route.params.id)
+      data.append('assignment_id', this.form.ref_no)
       data.append('report_submitted_id', this.receiving_copy.reports.value)
       data.append('report_submitted', this.receiving_copy.reports.label)
       this.$q.loading.show()

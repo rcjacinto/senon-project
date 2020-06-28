@@ -38,7 +38,7 @@
           <q-td>
             <q-btn @click="openDialog('view', props.row)" color="grey-8" label="View" size="sm" icon="search"/>
             &nbsp;
-            <q-btn @click="openDialog('update', props.row)" color="yellow-8" label="View" size="sm" icon="update"/>
+            <q-btn @click="openDialog('update', props.row)" color="yellow-8" label="Update" size="sm" icon="update"/>
           </q-td>
         </q-tr>
       </q-table>
