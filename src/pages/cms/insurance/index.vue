@@ -75,8 +75,8 @@ export default {
         sortBy: 'id',
         descending: false,
         page: 1,
-        rowsPerPage: 10,
-        rowsNumber: ''
+        rowsPerPage: 5,
+        rowsNumber: 5
       },
       columns: [
         {
@@ -126,25 +126,25 @@ export default {
 	},	
   methods: {
 		// get list of assignments per page
-    getListingData (props) {
+    async getListingData (props) {
       const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
 			const filter = props.filter
 			
 			this.loading = true
 
       // update rowsCount with appropriate value
-			this.pagination.rowsNumber = this.getRowsNumberCount(filter)
+			this.pagination.rowsNumber = await this.getRowsNumberCount(filter)
 
 			// get all rows if "All" (0) is selected
 			const fetchCount = rowsPerPage === 0 ? this.pagination.rowsNumber : rowsPerPage
-
+			
 			// calculate starting row of data
 			const startRow = (page - 1) * rowsPerPage
 
 			// fetch list of assignments within the given parameters
-      this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&orderBy=' + sortBy)
+      await this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&orderBy=' + sortBy)
         .then(response => {
-          this.data.splice(0, response.data.data.length, ...response.data.data)
+          this.data.splice(0, this.data.length, ...response.data.data)
 
           // don't forget to update local pagination object
           this.pagination.page = page
@@ -158,43 +158,46 @@ export default {
 		},
 		// calculate rowsCount with appropriate value
 		getRowsNumberCount (filter) {
-      this.$axios.get('api/assignment')
-        .then(response => {
+			return new Promise((resolve, reject) => {
+				this.$axios.get('api/assignment')
+				.then(response => {
 					if (!filter) {
-						return response.data.data.length
-          }
-          let count = 0
-          response.data.data.forEach(data => {
-            if (data['ref_no'].includes(filter)) {
-              ++count
+						resolve(response.data.data.length)
+					}
+
+					let count = 0
+					response.data.data.forEach(data => {
+						if (data['ref_no'].includes(filter)) {
+							++count
 						}
 						if (data['claim_num'].includes(filter)) {
-              ++count
-            }
-            if (data['insurer'].includes(filter)) {
-              ++count
-            }
-            if (data['broker'].includes(filter)) {
-              ++count
-            }
-            if (data['adjuster'].includes(filter)) {
-              ++count
+							++count
+						}
+						if (data['insurer'].includes(filter)) {
+							++count
+						}
+						if (data['broker'].includes(filter)) {
+							++count
+						}
+						if (data['adjuster'].includes(filter)) {
+							++count
 						}
 						if (data['name_insured'].includes(filter)) {
-              ++count
+							++count
 						}
 						if (data['date_loss'].includes(filter)) {
-              ++count
+							++count
 						}
 						if (data['status'].includes(filter)) {
-              ++count
-            }
-          })
-
-          return count
-        })
-        .catch(error => console.log(error))
-    }
+							++count
+						}
+					})
+					
+					resolve(count)
+				})
+				.catch(error => console.log(error))
+			})
+		}
   }
 }
 </script>
