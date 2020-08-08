@@ -10,14 +10,12 @@
         <q-card-section class="q-pt-none">
           <q-input label="Email" :disable="actionType === 'view'" v-model="user" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
           <q-input label="Full Name" :disable="actionType === 'view'" v-model="fullName" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
-            <q-select v-model="userType" :options="userLevel" label="User Level" stack-label/>
-          <q-input type="password" label="Password" :disable="actionType === 'view'" v-model="password" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
-          <q-input type="password" label="Confirm Password" :disable="actionType === 'view'" v-model="enPassword" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          <q-select :disable="actionType === 'view'" v-model="userType" :options="userLevel" label="User Level" stack-label/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat :label="(actionType === 'view') ? 'Close' : 'Cancel'" v-close-popup />
-          <q-btn flat :disable="password!=enPassword || password===''" @click="performAction" v-if="!(actionType === 'view')" :label="buttonText" color="primary" v-close-popup />
+          <q-btn flat :disable="userType === null || user === null || fullName === null" @click="performAction" v-if="!(actionType === 'view')" :label="buttonText" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -35,10 +33,11 @@
       :data="tableData"
       :columns="columns"
       separator="cell"
+      @request="getListingData"
     >
         <q-tr slot="body" slot-scope="props" :props="props">
           <q-td class="text-green-9">{{props.row.id}}</q-td>
-          <q-td>{{props.row.fullName}}</q-td>
+          <q-td>{{props.row.name}}</q-td>
           <q-td>{{props.row.email}}</q-td>
           <q-td>
             <q-btn @click="openDialog('view', props.row)" color="grey-8" label="View" size="sm" icon="search"/>
@@ -66,12 +65,14 @@ export default {
       tableData: [],
       password: '',
       enPassword: '',
+      filter: '',
+      loading: false,
       pagination: {
-        sortBy: 'desc',
+        sortBy: 'id',
         descending: false,
-        page: 2,
-        rowsPerPage: 3
-        // rowsNumber: xx if getting data from a server
+        page: 1,
+        rowsPerPage: 5,
+        rowsNumber: 5
       },
       columns: [
         { align: 'left', name: 'id', label: '#', field: 'id', sortable: true },
@@ -88,7 +89,8 @@ export default {
           label: 'User',
           value: 2
         }
-      ]
+      ],
+      data: []
     }
   },
   computed: {
@@ -113,8 +115,10 @@ export default {
     openDialog (value, data) {
       this.actionType = value
       this.prompt = true
-      this.user = data.user
+      this.fullName = data.name
+      this.user = data.email
       this.id = data.id
+      this.userType = this.userLevel.find((e) => e.label === data.user_level)
     },
     checkPassword () {
       if (this.password !== this.enPassword) {
@@ -128,73 +132,92 @@ export default {
     performAction () {
       let payload = {
         email: this.user,
-        password: this.password,
         name: this.fullName,
-        userType: this.userType
+        user_level_id: this.userType.value
       }
-      firebaseAuth.createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(res => {
-          /* CREATE RECORD ON DB */
-          let userId = firebaseAuth.currentUser.uid
-          firebaseDb.doc('users/' + userId).set({
-            fullName: payload.name,
-            email: payload.email,
-            userType: payload.userType
-          })
-          this.$q.notify({
-            color: 'positive',
-            message: `Record has been added successfully`,
-            position: 'top-right'
-          })
-          this.getListingData()
+
+      let method
+
+      if (this.actionType === 'update') {
+        method = this.$axios.patch(`/api/users/${this.id}`, { data: payload })
+      } else {
+        method = this.$axios.post('/api/register', payload)
+      }
+        method.then((result) => {
+          if (result) {
+            this.$q.notify({
+              color: 'positive',
+              message: `Record has been ${(this.actionType === 'update') ? 'updated' : 'created'} successfully`,
+              position: 'top-right'
+            })
+            this.getListingData(
+              {
+                pagination: this.pagination,
+                filter: undefined
+              }
+            )
+          }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((error) => {
           this.$q.notify({
             color: 'negative',
-            message: `Failed to create record`,
+            message: `Failed to ${(this.actionType === 'update') ? 'updated' : 'created'} record`,
             position: 'top-right'
           })
         })
     },
-    performAction2 () {
-      this.$q.loading.show()
-      let action = ''
-      if (this.actionType === 'update') {
-        action = this.$axios.patch(`/api/brokers/${this.id}`, { data: { user: this.user } })
-      } else {
-        action = this.$axios.post('/api/brokers', { user: this.user })
-      }
-      action.then(res => {
-        this.$q.loading.hide()
-        this.$q.notify({
-          color: 'positive',
-          message: `Record has been ${(this.actionType === 'update') ? 'updated' : 'created'} successfully`,
-          position: 'top-right'
+    async getListingData (props) {
+      const { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
+			const filter = props.filter
+
+			this.loading = true
+
+      // update rowsCount with appropriate value
+			// this.pagination.rowsNumber = await this.getRowsNumberCount(filter)
+
+			// get all rows if "All" (0) is selected
+			const fetchCount = rowsPerPage === 0 ? this.pagination.rowsNumber : rowsPerPage
+
+			// calculate starting row of data
+			const startRow = (page - 1) * rowsPerPage
+
+			// fetch list of assignments within the given parameters
+      await this.$axios.get('api/users?startRow=' + startRow + '&fetchCount=' + fetchCount + '&orderBy=' + sortBy)
+        .then(response => {
+          this.tableData = response.data.data
+
+          // don't forget to update local pagination object
+          this.pagination.page = page
+          this.pagination.rowsPerPage = rowsPerPage
+          this.pagination.sortBy = sortBy
+          this.pagination.descending = descending
+
+          // ...and turn of loading indicator
+          this.loading = false
         })
-        this.getListingData()
-      }).catch((err) => {
-        this.$q.notify({
-          color: 'negative',
-          message: err.response.data.message,
-          position: 'top-right'
-        })
-        this.$q.loading.hide()
-      })
     },
-    async getListingData () {
-      this.tableData = []
-      await firebaseDb.collection('users').get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.tableData.push({ id: doc.id, ...doc.data() })
+    async getUserLevels () {
+      await this.$axios.get('api/user_levels')
+        .then((response) => {
+          this.tableData = response.data.map((element) => {
+            return {
+              value: element.id,
+              label: element.user_level
+            }
           })
         })
-      console.log(this.tableData)
+        .catch((error) => {
+        })
     }
   },
   created () {
-    this.getListingData()
+    this.getUserLevels()
+    this.getListingData(
+      {
+        pagination: this.pagination,
+        filter: undefined
+      }
+    )
   }
 }
 </script>
