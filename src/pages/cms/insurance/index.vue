@@ -142,7 +142,7 @@ export default {
 			const startRow = (page - 1) * rowsPerPage
 
 			// fetch list of assignments within the given parameters
-      await this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&orderBy=' + sortBy)
+      await this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&sortBy=' + sortBy)
         .then(response => {
           this.data.splice(0, this.data.length, ...response.data.data)
 
@@ -159,41 +159,9 @@ export default {
 		// calculate rowsCount with appropriate value
 		getRowsNumberCount (filter) {
 			return new Promise((resolve, reject) => {
-				this.$axios.get('api/assignment')
+				this.$axios.get('api/filtered_assignments_count?filter=' + filter)
 				.then(response => {
-					if (!filter) {
-						resolve(response.data.data.length)
-					}
-
-					let count = 0
-					response.data.data.forEach(data => {
-						if (data['ref_no'].includes(filter)) {
-							++count
-						}
-						if (data['claim_num'].includes(filter)) {
-							++count
-						}
-						if (data['insurer'].includes(filter)) {
-							++count
-						}
-						if (data['broker'].includes(filter)) {
-							++count
-						}
-						if (data['adjuster'].includes(filter)) {
-							++count
-						}
-						if (data['name_insured'].includes(filter)) {
-							++count
-						}
-						if (data['date_loss'].includes(filter)) {
-							++count
-						}
-						if (data['status'].includes(filter)) {
-							++count
-						}
-					})
-					
-					resolve(count)
+					resolve(response.data[0].count)
 				})
 				.catch(error => console.log(error))
 			})
