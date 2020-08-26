@@ -142,7 +142,7 @@ export default {
 			const startRow = (page - 1) * rowsPerPage
 
 			// fetch list of assignments within the given parameters
-      await this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&sortBy=' + sortBy)
+      await this.$axios.get('api/assignment?startRow=' + startRow + '&fetchCount=' + fetchCount + '&sortBy=' + sortBy + '&filterBy=' + filter)
         .then(response => {
           this.data.splice(0, this.data.length, ...response.data.data)
 
