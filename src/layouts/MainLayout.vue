@@ -27,8 +27,8 @@
     >
     <div class="text-center text-primary q-pt-lg">
     <q-icon name="account_circle" size="100px"/>
-    <p class="text-subtitle2">John Smith Morgan</p>
-    <p class="text-h6">Administrator</p>
+    <p class="text-subtitle2">{{ this.user }}</p>
+    <p class="text-h6">{{ this.userLevel }}</p>
     <p class="text-subtitle1 text-white bg-grey-5 q-pa-lg text-center">
       Senon insurance Adjuster & Appraisers</p>
     </div>
@@ -47,7 +47,7 @@
         <q-item-section>Assignment</q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple v-bind:to="'/cms/borderaux'">
         <q-item-section avatar>
           <q-icon color="secondary" name="print" />
         </q-item-section>
@@ -122,9 +122,20 @@ export default {
 
   data () {
     return {
-      leftDrawerOpen: false
+			leftDrawerOpen: false,
+			loginInfo: JSON.parse(localStorage.loginInfo)
     }
-  },
+	},
+	
+	computed: {
+		user () {
+			return this.loginInfo.user
+		},
+
+		userLevel () {
+			return this.loginInfo.userLevel
+		}
+	},
 
   methods: {
     logout () {
