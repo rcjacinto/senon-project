@@ -100,8 +100,8 @@ export default {
 		exportReport () {
 			const selection = this.reportSelected
 			const filter = this.filter
-			
-			window.open(`http://localhost/senon-be/public/api/export_report?selection=${selection}&value=${filter}`)
+
+			window.open(`http://18.162.225.34/api/export_report?selection=${selection}&value=${filter}`)
 		}
 	}
 }
