@@ -115,7 +115,7 @@ export default {
         name_insured: null,
         risk_location: null,
         nature_loss: null,
-        date_loss: date.formatDate(new Date(), 'YYYY-MM-DD'),
+        date_loss: null,
         loss_reserve: null,
         adjuster: null,
         insurer: null,

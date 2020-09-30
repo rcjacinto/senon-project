@@ -19,10 +19,13 @@
       </div>
 			<div class="row">
 				<div class="col q-ma-sm">
-					<q-input label="Reference Number" :disable="edit" v-model="form.ref_no" stack-label/>
+					<q-input label="Reference Number" :disable="edit" v-model="form.ref_no" stack-label readonly/>
 				</div>
 				<div class="col q-ma-sm">
 					<q-input label="Claim Number" :disable="edit" v-model="form.claim_num" stack-label/>
+				</div>
+				<div class="col q-ma-sm">
+					<q-input label="Status" :disable="edit" v-model="form.status" stack-label readonly/>
 				</div>
 			</div>
       <div class="row">
@@ -122,7 +125,7 @@
 							<td class="text-left">
 								<a
 									class="q-mr-sm"
-									:href="'http://18.162.116.197/storage/' + item.attachment"
+									:href="'http://18.162.225.34/storage/' + item.attachment"
 									target="_blank"
 								>
 									{{ item.attachment }}
@@ -147,12 +150,12 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-					<q-select v-model="form.status_id_list" :options="options" label="Event Status" />
+					<q-select v-model="status_id" :options="options" label="Event Status" emit-value map-options/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Confirm" color="primary" v-close-popup />
+          <q-btn label="Confirm" type="submit" @click="updateAssignmentStatus()" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -189,13 +192,15 @@
 </template>
 
 <script>
+import { date } from 'quasar'
 
 export default {
   // name: 'PageName',
   data () {
     return {
       edit: true,
-      prompt: false,
+			prompt: false,
+			status_id: null,
       receiving_prompt: false,
       options: [],
       reportOptions: [],
@@ -225,7 +230,7 @@ export default {
         third_party: null,
         broker: null,
         remarks: null,
-        status_list_id: 1,
+        status: null,
         created_by: 'admin'
 			},
 			attachments: []
@@ -273,8 +278,8 @@ export default {
     getAssignmentInfo () {
       const assignId = this.$route.params.id
       this.$axios.get('/api/assignment/edit/' + assignId).then(res => {
-				this.form = res.data
-				this.getAttachmentInfo(res.data.ref_no)
+				this.form = res.data.data
+				this.getAttachmentInfo(res.data.data.ref_no)
       })
 		},
 		getAttachmentInfo (ref_no) {
@@ -320,8 +325,7 @@ export default {
         header: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(res => {
-        this.$q.loading.hide()
+      }).then(res => {        
         this.$q.notify({
           color: 'positive',
           message: 'Receiving Copy has been created successfully',
@@ -333,9 +337,33 @@ export default {
           message: err.response.data.message,
           position: 'top-right'
         })
-        this.$q.loading.hide()
-      })
-    }
+      }).finally(() => {
+				this.$q.loading.hide()
+			})
+		},
+		updateAssignmentStatus() {
+			this.$axios.post('/api/update_assignment_status/' + this.$route.params.id, {
+				data: {
+					'status_list_id': this.status_id
+				},
+				_method: 'PATCH'
+			}).then(res => {        
+        this.$q.notify({
+          color: 'positive',
+          message: 'Status Update',
+          position: 'top-right'
+				})
+				this.form.status = res.data
+      }).catch((err) => {
+        this.$q.notify({
+          color: 'negative',
+          message: err.response.data.message,
+          position: 'top-right'
+        })
+      }).finally(() => {
+				this.$q.loading.hide()
+			})
+		}
   }
 }
 </script>
