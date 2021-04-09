@@ -125,7 +125,7 @@
 							<td class="text-left">
 								<a
 									class="q-mr-sm"
-									:href="'http://18.162.225.34/storage/' + item.attachment"
+									:href="'http://54.254.80.181/storage/' + item.attachment"
 									target="_blank"
 								>
 									{{ item.attachment }}
