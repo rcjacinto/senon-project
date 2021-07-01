@@ -28,14 +28,6 @@
 						</template>
 					</q-input>
 				</template>
-				<template v-slot:body-cell-aging="agingProperty">
-					<q-td :props="agingProperty">
-						<timeago
-              :datetime="agingProperty.value"
-              :auto-update="60"
-            ></timeago>
-					</q-td>
-				</template>
 				<template v-slot:body-cell-action="actionProperty">
 					<q-td :props="actionProperty">
 						<router-link
@@ -59,12 +51,6 @@
 
 <script>
 import Vue from 'vue'
-import VueTimeago from 'vue-timeago'
-
-Vue.use(VueTimeago, {
-	name: 'Timeago', // Component name, `Timeago` by default
-	locale: 'en', // Default locale
-})
 
 export default {
   data () {
@@ -75,8 +61,8 @@ export default {
         sortBy: 'id',
         descending: false,
         page: 1,
-        rowsPerPage: 5,
-        rowsNumber: 5
+        rowsPerPage: 10,
+        rowsNumber: 10
       },
       columns: [
         {
@@ -88,23 +74,16 @@ export default {
           format: val => `${val}`,
           sortable: true
         },
-				{ align: 'left', name: 'date_assigned', label: 'Date Assigned', field: 'date_assigned', sortable: true },
-        { align: 'left', name: 'ref_num', label: 'Reference Number', field: 'ref_no', sortable: true },
-        { align: 'left', name: 'claim_num', label: 'Claim Number', field: 'claim_num', sortable: true },
+        { align: 'left', name: 'ref_no', label: 'Reference Number', field: 'ref_no', sortable: true },
         { align: 'left', name: 'insurer', label: 'Insurance', field: 'insurer', sortable: true },
         { align: 'left', name: 'broker', label: 'Broker', field: 'broker', sortable: true },
-        { align: 'left', name: 'adjust', label: 'Adjuster', field: 'adjuster' },
-        { align: 'left', name: 'insured', label: 'Insured', field: 'name_insured' },
+        { align: 'left', name: 'adjuster', label: 'Adjuster', field: 'adjuster' },
+        { align: 'left', name: 'name_insured', label: 'Insured', field: 'name_insured' },
+        { align: 'left', name: 'nature_loss', label: 'Nature of Loss', field: 'nature_loss' },
+        { align: 'left', name: 'date_loss', label: 'Date of Loss', field: 'date_loss' },
+        { align: 'left', name: 'contact_person', label: 'Contact Person', field: 'contact_person' },
+        { align: 'left', name: 'contact_number', label: 'Contact Number', field: 'contact_number' },
         { align: 'left', name: 'status', label: 'Status', field: 'status', sortable: true },
-        {
-					align: 'left',
-					name: 'aging',
-					label: 'Aging',
-					field: 'created_at',
-					field: row => row.created_at,
-					format: val => `${val}`,
-					sortable: true
-				},
         {
           name: 'action',
           label: 'ACTION',

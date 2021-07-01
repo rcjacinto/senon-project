@@ -22,7 +22,7 @@
 					<q-input label="Reference Number" :disable="edit" v-model="form.ref_no" stack-label readonly/>
 				</div>
 				<div class="col q-ma-sm">
-					<q-input label="Claim Number" :disable="edit" v-model="form.claim_num" stack-label/>
+					<q-input label="Claim Number" :disable="edit" v-model="form.claim_no" stack-label/>
 				</div>
 				<div class="col q-ma-sm">
 					<q-input label="Status" :disable="edit" v-model="form.status" stack-label readonly/>
@@ -64,6 +64,30 @@
           </div>
           <div class="col q-ma-sm">
             <q-input label="Loss Reserve" :disable="edit" v-model="form.loss_reserve" stack-label />
+          </div>
+      </div>
+      <!-- Break -->
+      <div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Status of Adjustment" :disable="edit" v-model="form.status_of_adjustment" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Risk" :disable="edit" v-model="form.risk" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Value of Risk" :disable="edit" v-model="form.value_of_risk" stack-label />
+          </div>
+      </div>
+      <!-- Break -->
+			<div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Amount of Insurance" :disable="edit" v-model="form.amount_of_insurance" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Recommended Payable" :disable="edit" v-model="form.recommended_payable" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Date of Adjustment" :disable="edit" v-model="form.date_of_adjustment" stack-label type="date"/>
           </div>
       </div>
       <!-- Break -->
@@ -214,23 +238,29 @@ export default {
       form: {
         date_assigned: null,
 				date_inspected: null,
+        insurer: null,
+        broker: null,
+				claim_no: null,
 				ref_no: null,
-				claim_num: null,
-        pol_type: null,
-        pol_no: null,
         name_insured: null,
+        adjuster: null,
+        third_party: null,
+        pol_no: null,
+        pol_type: null,
         risk_location: null,
         nature_loss: null,
         date_loss: null,
-        loss_reserve: null,
-        adjuster: null,
-        insurer: null,
         contact_person: null,
         contact_number: null,
-        third_party: null,
-        broker: null,
-        remarks: null,
+        loss_reserve: null,
         status: null,
+        status_of_adjustment: null,
+        risk: null,
+        value_of_risk: null,
+        amount_of_insurance: null,
+        recommended_payable: null,
+        date_of_adjustment: null,
+        remarks: null,
         created_by: 'admin'
 			},
 			attachments: []

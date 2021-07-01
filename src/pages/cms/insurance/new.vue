@@ -56,6 +56,30 @@
           </div>
       </div>
       <!-- Break -->
+			<div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Status of Adjustment" v-model="form.status_of_adjustment" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Risk" v-model="form.risk" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Value of Risk" v-model="form.value_of_risk" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+      </div>
+      <!-- Break -->
+			<div class="row">
+          <div class="col q-ma-sm">
+            <q-input label="Amount of Insurance" v-model="form.amount_of_insurance" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Recommended Payable" v-model="form.recommended_payable" stack-label :rules="[ val => val && val.length > 0 || 'Required']"/>
+          </div>
+          <div class="col q-ma-sm">
+            <q-input label="Date of Adjustment" v-model="form.date_of_adjustment" stack-label type="date"/>
+          </div>
+      </div>
+      <!-- Break -->
       <div class="row">
           <div class="col q-ma-sm">
             <q-select v-model="form.adjuster" :options="adjuster" emit-value label="Adjuster" stack-label/>
@@ -109,20 +133,27 @@ export default {
       form: {
 				date_assigned: date.formatDate(new Date(), 'YYYY-MM-DD'),
 				date_inspected: null,
-				claim_num: null,
-        pol_type: null,
-        pol_no: null,
+        insurer: null,
+        broker: null,
+				claim_no: null,
+				ref_no: null,
         name_insured: null,
+        adjuster: null,
+        third_party: null,
+        pol_no: null,
+        pol_type: null,
         risk_location: null,
         nature_loss: null,
         date_loss: null,
-        loss_reserve: null,
-        adjuster: null,
-        insurer: null,
         contact_person: null,
         contact_number: null,
-        third_party: null,
-        broker: null,
+        loss_reserve: null,
+        status_of_adjustment: null,
+        risk: null,
+        value_of_risk: null,
+        amount_of_insurance: null,
+        recommended_payable: null,
+        date_of_adjustment: null,
         remarks: null,
         status_list_id: 1,
         created_by: 'admin'

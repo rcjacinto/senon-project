@@ -14,8 +14,11 @@
 				<div class="col q-ma-sm">
 					<q-select v-model="reportSelected" :options="reportSelection" @input="onReportSelected" label="Selection" emit-value map-options/>
 				</div>
-				<div class="col q-ma-sm">
+				<div class="col q-ma-sm" v-if="requiresFilter">
 					<q-select v-model="filter" :options="filterOptions" label="Selection" emit-value map-options/>
+				</div>
+				<div class="col q-ma-sm" v-if="isQuarterly">
+					<q-select v-model="filter" :options="quarterlyOptions" label="Selection" emit-value map-options/>
 				</div>
 				<div class="col q-ma-sm q-gutter-sm">
 					<q-btn color="primary" label="Generate" @click="generateReport"/>
@@ -40,6 +43,8 @@ export default {
 		return {
 			reportSelected: null,
 			filter: null,
+			requiresFilter: false,
+			isQuarterly: false,
 			reportSelection: [
 				{
 					label: 'Per Adjuster',
@@ -53,10 +58,28 @@ export default {
 					label: 'Per Insurer',
 					value: 'insurer'
 				},
-				// {
-				// 	label: 'Quarterly Report',
-				// 	value: 'quarterly'
-				// }
+				{
+					label: 'Quarterly Report',
+					value: 'quarterly'
+				}
+			],
+			quarterlyOptions: [
+				{
+					label: '1st Quarter',
+					value: 'first_quarter'
+				},
+				{
+					label: '2nd Quarter',
+					value: 'second_quarter'
+				},
+				{
+					label: '3rd Quarter',
+					value: 'third_quarter'
+				},
+				{
+					label: '4th Quarter',
+					value: 'fourth_quarter'
+				}
 			],
 			filterOptions: []
 		}
@@ -69,6 +92,10 @@ export default {
 			this.filterOptions = []
 			
 			if (selection !== 'quarterly') {
+				this.filter = null;
+				this.requiresFilter = true;
+				this.isQuarterly = false
+
 				const result = await this.$axios.get('api/selection_options?selection=' + selection)
 					.then(response => response.data)
 					.catch(error => console.log(error))
@@ -90,6 +117,10 @@ export default {
 						return { label: result.insurer, value: result.insurer }
 					})
 				}
+			} else {
+				this.filter = null;
+				this.requiresFilter = false;
+				this.isQuarterly = true;
 			}
 		},
 
